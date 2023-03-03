@@ -1,0 +1,6 @@
+unresolved issues
+
+a) when release the botton of Down, the character should change its posture from Crouching to idle IMMIDIATELY. But is does not.
+b) same proble to the posture Aim and jump. 
+c) the scene camera problem: when the character highly jump, the scene camera follows up. 
+However, when the character fall down, the camera does not. As a result, part of the character cannot display.
