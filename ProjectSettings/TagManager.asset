@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Ammo
   layers:
   - Default
   - TransparentFX
@@ -13,8 +14,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Ground
+  - Character
   - 
   - 
   - 
@@ -40,4 +41,25 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 3025908549
+    locked: 0
+  - name: New
+    uniqueID: 3708855393
+    locked: 0
+  - name: Enemy_dead
+    uniqueID: 1393980131
+    locked: 0
+  - name: New Layer 4
+    uniqueID: 234682371
+    locked: 0
+  - name: New Layer 5
+    uniqueID: 1647907703
+    locked: 0
+  - name: New Layer 6
+    uniqueID: 864074385
+    locked: 0
+  - name: Character
+    uniqueID: 4151938605
     locked: 0
