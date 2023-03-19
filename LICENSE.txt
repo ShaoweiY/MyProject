@@ -119,3 +119,24 @@ express Statement of Purpose.
  d. Affirmer understands and acknowledges that Creative Commons is not a
     party to this document and has no duty or obligation with respect to
     this CC0 or use of the Work.
+
+5. Assets list
+
+ a. Self-produced -- including but not limited: player movement images (idel, run, jump, aim, crouch, etc), 
+     Items (recovery, storages1,storages2,storages3, etc.), Tilemaps, 
+     backgrounds images(Background, bg_bar, bg_bbar, bg_black bar, bg_black_bar, bg_far, bg_grass, etc.).
+ b. Free Forest Pack -- from Palladadesign | Unity free assets store.
+     (https://assetstore.unity.com/packages/2d/textures-materials/free-forest-pack-68957)
+ c. Broken car -- Broken Car png images | PNGWing. 
+     (https://www.pngwing.com/en/free-png-aadup)
+ d. Broken train -- Abandoned Rusty Train Stock Photos, Pictures & Royalty-Free Images. 
+     Creator: Luciano_Queiroz. | Credit: Getty Images/iStockphoto
+     (https://www.istockphoto.com/photo/abandoned-train-in-paranapiacaba-railway-station-sp-brazil-gm881894958-245485869)
+ e. box -- crate wood box front view 3d illustration graphic. Illustration Contributor: Zoom Photo Graphic Stock.     
+     (https://www.shutterstock.com/image-illustration/crate-wood-box-front-view-3d-1296457816)
+
+
+
+
+
+
