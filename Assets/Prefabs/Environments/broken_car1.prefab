@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4008636078189160222}
   - component: {fileID: 4008636078189160220}
   - component: {fileID: 4008636078189160221}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: broken_car1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,7 +98,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -3.8235302, y: 0}
+  m_Offset: {x: -6.1995263, y: -1.3488884}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -109,5 +109,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 43.772038, y: 39.75}
+  m_Size: {x: 35.714314, y: 37.052223}
   m_EdgeRadius: 0

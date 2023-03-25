@@ -11,8 +11,7 @@ public class playerMoves : MonoBehaviour
     public LayerMask groundLayer;
     public Animator animator;
 
-    private float horizontal;
-    
+    private float horizontal;    
     private bool isFacingPositive = true;
     public Collider2D col;
 
@@ -24,11 +23,13 @@ public class playerMoves : MonoBehaviour
     [SerializeField] float jumpForce;
     [SerializeField] float fallMultiplier;
     [SerializeField] float jumpMultiplier;
+    float tempSpeed;
     Vector2 pGravity;
 
     void Start()
     {
         pGravity = new Vector2(0, -Physics2D.gravity.y);
+        tempSpeed = speed;
     }
 
 
@@ -54,6 +55,7 @@ public class playerMoves : MonoBehaviour
         switchAnim();
     }
 
+    //object collection
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag == "Ammo")
@@ -64,30 +66,39 @@ public class playerMoves : MonoBehaviour
         }
     }
 
+    //player aims
     public void Aim(InputAction.CallbackContext context)
     {
+        
         if (context.performed && col.IsTouchingLayers(groundLayer))
         {
             animator.SetBool("aiming", true);
+            speed = 0;
         }
-        else
+        if(context.canceled)
         {
             animator.SetBool("aiming", false);
+            speed = tempSpeed;
         }
+        
     }
 
+    //player crouches
     public void Crouch(InputAction.CallbackContext context)
     {
         if(context.performed && col.IsTouchingLayers(groundLayer))
         {
             animator.SetBool("crouching", true);
+            speed *= 0.5f;
         }
-        else
+        if (context.canceled)
         {
             animator.SetBool("crouching", false);
+            speed = tempSpeed;
         }
     }
 
+    //player jumps
     public void Jump(InputAction.CallbackContext context)
     {
         if (context.performed && col.IsTouchingLayers(groundLayer))
@@ -97,6 +108,7 @@ public class playerMoves : MonoBehaviour
         }
     }   
 
+    //player moves
     public void Move(InputAction.CallbackContext context)
     {
         horizontal = context.ReadValue<Vector2>().x;
@@ -104,6 +116,8 @@ public class playerMoves : MonoBehaviour
         
     }
 
+
+    //change animation stages
     public void switchAnim()
     {
         animator.SetBool("idle", false);
@@ -122,6 +136,7 @@ public class playerMoves : MonoBehaviour
         }
     }
 
+    //change direction
     private void Flip()
     {
         isFacingPositive = !isFacingPositive;
