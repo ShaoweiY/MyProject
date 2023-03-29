@@ -7,29 +7,42 @@ using UnityEngine.UI;
 public class playerMoves : MonoBehaviour
 {
     public Rigidbody2D rb;
+    public Collider2D col;
+
+    //Move speed & Face direction
+    [SerializeField] float speed;
+    float temp_speed;
+    private float horizontal;
+    private bool isFacingPositive = true;
+
+    //Ground check
+    public bool hitGround;
     public Transform onGround;
     public LayerMask groundLayer;
     public Animator animator;
 
-    private float horizontal;    
-    private bool isFacingPositive = true;
-    public Collider2D col;
+    public float footOffset = 0.4f;
+    public float headAbove = 0.5f;
+    public float groundDist = 0.2f;
 
+    //Collection
     public int Ammo = 0;
     public Text storageNum;
 
-    [SerializeField] float speed;
+    //Jump
+    [SerializeField] bool isjumping;
     [SerializeField] float jumpTime;
     [SerializeField] float jumpForce;
     [SerializeField] float fallMultiplier;
     [SerializeField] float jumpMultiplier;
-    float tempSpeed;
+    
     Vector2 pGravity;
 
     void Start()
     {
         pGravity = new Vector2(0, -Physics2D.gravity.y);
-        tempSpeed = speed;
+        temp_speed = speed;
+
     }
 
 
@@ -52,6 +65,7 @@ public class playerMoves : MonoBehaviour
             rb.velocity -= pGravity * fallMultiplier * Time.deltaTime;
         }
 
+        physicsCheck();
         switchAnim();
     }
 
@@ -66,19 +80,31 @@ public class playerMoves : MonoBehaviour
         }
     }
 
+    //player reload
+    public void Reload(InputAction.CallbackContext context)
+    {
+        if (Ammo > 0 && context.performed && hitGround)
+        {
+            animator.SetBool("reloading", true);
+            Ammo--;
+        }
+    }
+
     //player aims
     public void Aim(InputAction.CallbackContext context)
     {
-        
-        if (context.performed && col.IsTouchingLayers(groundLayer))
+        if (context.performed && hitGround)
         {
             animator.SetBool("aiming", true);
             speed = 0;
+
+            
         }
         if(context.canceled)
         {
             animator.SetBool("aiming", false);
-            speed = tempSpeed;
+            speed = temp_speed;
+
         }
         
     }
@@ -86,22 +112,24 @@ public class playerMoves : MonoBehaviour
     //player crouches
     public void Crouch(InputAction.CallbackContext context)
     {
-        if(context.performed && col.IsTouchingLayers(groundLayer))
+        if (context.performed && hitGround)
         {
             animator.SetBool("crouching", true);
             speed *= 0.5f;
+
         }
         if (context.canceled)
         {
             animator.SetBool("crouching", false);
-            speed = tempSpeed;
+            speed = temp_speed;
+
         }
     }
 
     //player jumps
     public void Jump(InputAction.CallbackContext context)
     {
-        if (context.performed && col.IsTouchingLayers(groundLayer))
+        if (context.performed && hitGround)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             animator.SetBool("jumping", true);
@@ -116,6 +144,20 @@ public class playerMoves : MonoBehaviour
         
     }
 
+    public void physicsCheck()
+    {
+        if (col.IsTouchingLayers(groundLayer))
+        {
+            hitGround = true;
+            isjumping = false;
+        }
+        else
+        {
+            hitGround = false;
+            isjumping = true;
+        }
+            
+    }
 
     //change animation stages
     public void switchAnim()
@@ -129,7 +171,7 @@ public class playerMoves : MonoBehaviour
                 animator.SetBool("falling", true);
             }
         }
-        else if (col.IsTouchingLayers(groundLayer))
+        else if (hitGround)
         {
             animator.SetBool("falling", false);
             animator.SetBool("idle", true);
@@ -139,9 +181,15 @@ public class playerMoves : MonoBehaviour
     //change direction
     private void Flip()
     {
-        isFacingPositive = !isFacingPositive;
-        Vector3 localScale = transform.localScale;
-        localScale.x *= -1.0f;
-        transform.localScale = localScale;
+        if (!isjumping)
+        {
+            isFacingPositive = !isFacingPositive;
+            Vector3 localScale = transform.localScale;
+            localScale.x *= -1.0f;
+            transform.localScale = localScale;
+        }
+        
     }
+
+
 }

@@ -1076,7 +1076,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 900618243}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
@@ -1717,8 +1717,7 @@ GameObject:
   - component: {fileID: 1348605660}
   - component: {fileID: 1348605659}
   - component: {fileID: 1348605661}
-  - component: {fileID: 1348605666}
-  - component: {fileID: 1348605662}
+  - component: {fileID: 1348605667}
   - component: {fileID: 1348605663}
   - component: {fileID: 1348605664}
   - component: {fileID: 1348605665}
@@ -1812,28 +1811,12 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 6
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 1
   m_SleepingMode: 0
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!70 &1348605662
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1348605658}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 6200000, guid: 26b8bbc97fab06642904b7514f4d93b9, type: 2}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -1.2097827, y: -6.920602}
-  m_Size: {x: 4.6975317, y: 0.65646493}
-  m_Direction: 1
 --- !u!114 &1348605663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1880,7 +1863,19 @@ MonoBehaviour:
     m_ActionId: c3dbe39b-3877-4df0-9bdd-8a37bf13d6bb
     m_ActionName: Player/Look[/Mouse/delta,/Touchscreen/delta,/Pen/delta]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1348605664}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: a95918ba-5f57-4bf1-adbd-513f956052c8
     m_ActionName: Player/Fire[/Mouse/leftButton,/Touchscreen/primaryTouch/tap]
   - m_PersistentCalls:
@@ -1971,6 +1966,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: c5702a7e-c35c-468f-a5af-a79d0a4d192a
     m_ActionName: Player/Aim[/Keyboard/leftShift]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1348605664}
+        m_TargetAssemblyTypeName: playerMoves, Assembly-CSharp
+        m_MethodName: Reload
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 85d6cf13-0133-47b1-b3b2-d9085baa0879
+    m_ActionName: Player/Reload[/Keyboard/r]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -1989,19 +2000,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 1348605661}
+  col: {fileID: 1348605667}
+  speed: 26
+  hitGround: 0
   onGround: {fileID: 1291221913}
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
   animator: {fileID: 1348605665}
-  col: {fileID: 1348605662}
+  footOffset: 0.4
+  headAbove: 0.5
+  groundDist: 0.2
   Ammo: 0
   storageNum: {fileID: 1797666025}
-  speed: 26
+  isjumping: 0
   jumpTime: 0.4
-  jumpForce: 23
-  fallMultiplier: 12
-  jumpMultiplier: 5
+  jumpForce: 16
+  fallMultiplier: 1.2
+  jumpMultiplier: 80
 --- !u!95 &1348605665
 Animator:
   serializedVersion: 4
@@ -2022,8 +2038,8 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!60 &1348605666
-PolygonCollider2D:
+--- !u!61 &1348605667
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2035,7 +2051,7 @@ PolygonCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.8560529, y: 0.29747415}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -2045,65 +2061,9 @@ PolygonCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -2.4469583, y: -5.1995416}
-      - {x: -2.076435, y: -3.3661315}
-      - {x: -1.7639351, y: -2.8568413}
-      - {x: -1.0762916, y: -0.7102132}
-      - {x: -0.9383759, y: -0.54471457}
-      - {x: -0.65433484, y: -2.0377078}
-      - {x: -0.68291664, y: -4.420875}
-      - {x: -0.457, y: -5.530958}
-      - {x: -0.38016662, y: -6.257458}
-      - {x: -0.45684865, y: -6.493355}
-      - {x: -0.23395537, y: -6.505643}
-      - {x: 0.2933087, y: -6.5079737}
-      - {x: 0.29094625, y: -6.445864}
-      - {x: 0.2937165, y: -6.483488}
-      - {x: 0.2665105, y: -6.463386}
-      - {x: 0.25532386, y: -6.3884864}
-      - {x: 0.24787313, y: -6.326407}
-      - {x: 0.19330521, y: -4.1416993}
-      - {x: 0.16714412, y: -3.18603}
-      - {x: 0.37807015, y: -0.96875}
-      - {x: 0.6875, y: -0.1880117}
-      - {x: 0.9375, y: -0.28125}
-      - {x: 1.0645467, y: -0.15625}
-      - {x: 0.8477335, y: 1.0940808}
-      - {x: 0.16984195, y: 1.6777185}
-      - {x: 0.043813735, y: 3.3001084}
-      - {x: 0.4704464, y: 3.733699}
-      - {x: 0.54793465, y: 4.1710143}
-      - {x: -0.12125918, y: 4.659991}
-      - {x: -0.6135917, y: 5.633044}
-      - {x: -0.059259832, y: 6.1392975}
-      - {x: 0.042823344, y: 7.167361}
-      - {x: -0.25231525, y: 7.4134254}
-      - {x: -0.69143534, y: 7.697453}
-      - {x: -1.4675924, y: 7.6784716}
-      - {x: -1.7365739, y: 7.4513884}
-      - {x: -1.853703, y: 7.0780087}
-      - {x: -1.8347218, y: 6.1902776}
-      - {x: -1.9375867, y: 5.7577643}
-      - {x: -2.3916044, y: 5.254958}
-      - {x: -2.1985335, y: 4.368261}
-      - {x: -2.0630536, y: 3.78125}
-      - {x: -1.4945462, y: 2.483318}
-      - {x: -2.4118755, y: 1.2388462}
-      - {x: -2.3483553, y: 0.28534365}
-      - {x: -2.401978, y: -2.175466}
-      - {x: -2.9998157, y: -3.5064712}
-      - {x: -3.207, y: -4.3586664}
-      - {x: -3.317375, y: -6.0260835}
-      - {x: -3.4135292, y: -6.498516}
-      - {x: -3.3543863, y: -6.5891366}
-      - {x: -3.248945, y: -6.529528}
-      - {x: -3.0458612, y: -6.451572}
-      - {x: -2.7481806, y: -6.521684}
-      - {x: -2.58594, y: -6.523989}
-      - {x: -2.5746343, y: -6.3357625}
-      - {x: -2.6608474, y: -6.1646733}
+  serializedVersion: 2
+  m_Size: {x: 2.620695, y: 14.697639}
+  m_EdgeRadius: 0
 --- !u!4 &1349716177 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8788405854678881633, guid: d0d7c6d88748dc241be3ea17963e1757, type: 3}
