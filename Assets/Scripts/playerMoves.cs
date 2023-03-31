@@ -33,16 +33,23 @@ public class playerMoves : MonoBehaviour
     [SerializeField] bool isjumping;
     [SerializeField] float jumpTime;
     [SerializeField] float jumpForce;
+    private float temp_jumpForce;
     [SerializeField] float fallMultiplier;
     [SerializeField] float jumpMultiplier;
     
     Vector2 pGravity;
 
+    //Player attack
+    public bool isAiming;
+    public bool isCrouching;
+    public bool isFiring;
+
     void Start()
     {
         pGravity = new Vector2(0, -Physics2D.gravity.y);
         temp_speed = speed;
-
+        temp_jumpForce = jumpForce;
+        isFiring = false;
     }
 
 
@@ -66,7 +73,18 @@ public class playerMoves : MonoBehaviour
         }
 
         physicsCheck();
-        switchAnim();
+        jumpAnim();
+
+        if (isAiming == true)
+        {
+            speed = 0;
+            jumpForce = 0;
+        }
+        else if (isAiming == false)
+        {
+            speed = temp_speed;
+            jumpForce = temp_jumpForce;
+        }
     }
 
     //object collection
@@ -90,23 +108,59 @@ public class playerMoves : MonoBehaviour
         }
     }
 
+    public void Fire(InputAction.CallbackContext context)
+    {
+        
+        if (!isCrouching && isAiming && !isFiring && context.performed)
+        {
+            animator.SetBool("firing", true);
+            isFiring = true;
+            Debug.Log("Shoot!");
+        }
+        if(isCrouching && isAiming && !isFiring && context.performed)
+        {
+            animator.SetBool("crouch&firing", true);
+            isFiring = true;
+            Debug.Log("Crouch_Shoot!");
+        }
+        if (context.canceled)
+        {
+            isFiring = false;
+            animator.SetBool("firing", false);
+            animator.SetBool("crouch&firing", false);
+        }
+    }
+
     //player aims
     public void Aim(InputAction.CallbackContext context)
     {
         if (context.performed && hitGround)
         {
             animator.SetBool("aiming", true);
-            speed = 0;
-
-            
+            isAiming = true;
         }
         if(context.canceled)
         {
             animator.SetBool("aiming", false);
-            speed = temp_speed;
-
+            isAiming = false;
         }
-        
+
+        if((isCrouching && context.performed) || (context.performed && isCrouching))
+        {
+            animator.SetBool("crouching&aiming", true);
+            isAiming = true;
+        }
+        if (!isCrouching && context.performed)
+        {
+            animator.SetBool("aiming", true);
+            isAiming = true;
+        }
+        if (!isAiming)
+        {
+            animator.SetBool("aiming", false);
+            animator.SetBool("crouching&aiming", false);
+            isAiming = false;
+        }
     }
 
     //player crouches
@@ -114,12 +168,14 @@ public class playerMoves : MonoBehaviour
     {
         if (context.performed && hitGround)
         {
+            isCrouching = true;
             animator.SetBool("crouching", true);
             speed *= 0.5f;
 
         }
         if (context.canceled)
         {
+            isCrouching = false;
             animator.SetBool("crouching", false);
             speed = temp_speed;
 
@@ -160,7 +216,7 @@ public class playerMoves : MonoBehaviour
     }
 
     //change animation stages
-    public void switchAnim()
+    public void jumpAnim()
     {
         animator.SetBool("idle", false);
         if (animator.GetBool("jumping"))
@@ -181,7 +237,7 @@ public class playerMoves : MonoBehaviour
     //change direction
     private void Flip()
     {
-        if (!isjumping)
+        if (!isjumping) //lock player's direction when jumping
         {
             isFacingPositive = !isFacingPositive;
             Vector3 localScale = transform.localScale;

@@ -549,7 +549,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.113874, y: 0.6307411, z: -10}
+  m_LocalPosition: {x: 36.795044, y: 0.61794186, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1788,7 +1788,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1348605658}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -9, z: 0}
+  m_LocalPosition: {x: 28.68, y: -11.63, z: 0}
   m_LocalScale: {x: 1, y: 0.8854, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1863,19 +1863,7 @@ MonoBehaviour:
     m_ActionId: c3dbe39b-3877-4df0-9bdd-8a37bf13d6bb
     m_ActionName: Player/Look[/Mouse/delta,/Touchscreen/delta,/Pen/delta]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1348605664}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: a95918ba-5f57-4bf1-adbd-513f956052c8
     m_ActionName: Player/Fire[/Mouse/leftButton,/Touchscreen/primaryTouch/tap]
   - m_PersistentCalls:
@@ -1982,6 +1970,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 85d6cf13-0133-47b1-b3b2-d9085baa0879
     m_ActionName: Player/Reload[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1348605664}
+        m_TargetAssemblyTypeName: playerMoves, Assembly-CSharp
+        m_MethodName: Fire
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 0b067614-6494-41fe-be4c-21079340c36a
+    m_ActionName: Player/Attack[/Keyboard/z]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -2018,6 +2022,9 @@ MonoBehaviour:
   jumpForce: 16
   fallMultiplier: 1.2
   jumpMultiplier: 80
+  isAiming: 0
+  isCrouching: 0
+  isFiring: 0
 --- !u!95 &1348605665
 Animator:
   serializedVersion: 4
@@ -2520,7 +2527,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1701833789}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.113245, y: -0.78534126, z: -10}
+  m_LocalPosition: {x: 36.793243, y: -3.4153414, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -16822,11 +16829,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5377044470062246162, guid: 0aa80e371c3db85469bb54347f92e3bd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 98.7
+      value: 8.08
       objectReference: {fileID: 0}
     - target: {fileID: 5377044470062246162, guid: 0aa80e371c3db85469bb54347f92e3bd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -11.867976
+      value: -12.41
       objectReference: {fileID: 0}
     - target: {fileID: 5377044470062246162, guid: 0aa80e371c3db85469bb54347f92e3bd, type: 3}
       propertyPath: m_LocalPosition.z
@@ -16866,7 +16873,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5377044470062246165, guid: 0aa80e371c3db85469bb54347f92e3bd, type: 3}
       propertyPath: m_Size.y
-      value: 13.90411
+      value: 11.071674
       objectReference: {fileID: 0}
     - target: {fileID: 5377044470062246165, guid: 0aa80e371c3db85469bb54347f92e3bd, type: 3}
       propertyPath: m_Enabled
@@ -16874,7 +16881,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5377044470062246165, guid: 0aa80e371c3db85469bb54347f92e3bd, type: 3}
       propertyPath: m_Offset.y
-      value: -1.4037094
+      value: 0.012508631
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0aa80e371c3db85469bb54347f92e3bd, type: 3}

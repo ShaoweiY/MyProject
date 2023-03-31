@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 5377044470062246162}
   - component: {fileID: 5377044470062246167}
   - component: {fileID: 5377044470062246165}
-  m_Layer: 8
+  - component: {fileID: 6064512259878850180}
+  m_Layer: 10
   m_Name: box_wood
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5377044470062246163}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.8182507, y: -11.867976, z: -4.5366616}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 2.443, y: -12.6316, z: -4.5366616}
+  m_LocalScale: {x: 0.8693, y: 0.865, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -94,7 +95,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 5377044470062246163}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: 26b8bbc97fab06642904b7514f4d93b9, type: 2}
+  m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -111,3 +112,24 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 7.8727055, y: 11.10881}
   m_EdgeRadius: 0
+--- !u!50 &6064512259878850180
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5377044470062246163}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 10
+  m_Material: {fileID: 6200000, guid: b3713e775be1ed046938d1aeafd29ce6, type: 2}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
