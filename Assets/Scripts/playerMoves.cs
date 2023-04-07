@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using System;
 
 public class playerMoves : MonoBehaviour
 {
@@ -21,9 +22,8 @@ public class playerMoves : MonoBehaviour
     public LayerMask groundLayer;
     public Animator animator;
 
-    public float footOffset = 0.4f;
-    public float headAbove = 0.5f;
-    public float groundDist = 0.2f;
+    public bool isTouchingBlocks;
+    public LayerMask blocksLayer;
 
     //Collection
     public int Ammo = 0;
@@ -43,13 +43,32 @@ public class playerMoves : MonoBehaviour
     public bool isAiming;
     public bool isCrouching;
     public bool isFiring;
+    public Transform shootPoint_std;
+    public Transform shootPoint_crh;
+    public GameObject bullet;
+
+    //player health
+    public int maxHealth = 100;
+    public int current_health;
+    public HealthBar health_bar;
+    public int demage;
+
+    //Sound effects
+    [SerializeField] AudioSource fireEffect;
+    [SerializeField] AudioSource stepsEffect;
+
 
     void Start()
     {
+        current_health = maxHealth;
+        health_bar.SetMaxHealth(maxHealth);
+
         pGravity = new Vector2(0, -Physics2D.gravity.y);
         temp_speed = speed;
         temp_jumpForce = jumpForce;
         isFiring = false;
+        isTouchingBlocks = false;
+
     }
 
 
@@ -67,7 +86,8 @@ public class playerMoves : MonoBehaviour
             Flip();
         }
 
-        if(rb.velocity.y < 0)
+
+        if (rb.velocity.y < 0)
         {
             rb.velocity -= pGravity * fallMultiplier * Time.deltaTime;
         }
@@ -87,6 +107,40 @@ public class playerMoves : MonoBehaviour
         }
     }
 
+    public void Hurt(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            System.Random random = new System.Random();
+            demage = random.Next(0, 20);
+            current_health -= demage;
+
+            health_bar.setHealth(current_health);
+
+            Debug.Log(current_health);
+        }
+    }
+
+    /*
+    //touching the blocks
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Blocks"))
+        {
+            isTouchingBlocks = true;
+            animator.SetBool("touchBlocks", true);
+        }
+    }
+    public void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Blocks"))
+        {
+            isTouchingBlocks = false;
+            animator.SetBool("touchBlocks", false);
+        }
+    }
+    */
+
     //object collection
     public void OnTriggerEnter2D(Collider2D collision)
     {
@@ -96,16 +150,27 @@ public class playerMoves : MonoBehaviour
             Ammo += 1;
             storageNum.text = Ammo.ToString();
         }
+
+        if(collision.tag == "Medical")
+        {
+            Destroy(collision.gameObject);
+            current_health += 30;
+            health_bar.setHealth(current_health);
+            
+            if (current_health >= maxHealth)
+            {
+                current_health = maxHealth;
+                health_bar.setHealth(current_health);
+            }
+            Debug.Log(current_health);
+        }
     }
 
     //player reload
     public void Reload(InputAction.CallbackContext context)
     {
-        if (Ammo > 0 && context.performed && hitGround)
-        {
-            animator.SetBool("reloading", true);
-            Ammo--;
-        }
+        animator.SetBool("reloading", true);
+        Ammo--;
     }
 
     public void Fire(InputAction.CallbackContext context)
@@ -113,13 +178,22 @@ public class playerMoves : MonoBehaviour
         
         if (!isCrouching && isAiming && !isFiring && context.performed)
         {
+            fireEffect.Play();
             animator.SetBool("firing", true);
+
+            Instantiate(bullet, shootPoint_std.position, transform.rotation);
+
             isFiring = true;
             Debug.Log("Shoot!");
         }
         if(isCrouching && isAiming && !isFiring && context.performed)
         {
+            fireEffect.Play();
             animator.SetBool("crouch&firing", true);
+
+            Instantiate(bullet, shootPoint_crh.position, transform.rotation);
+
+
             isFiring = true;
             Debug.Log("Crouch_Shoot!");
         }
@@ -168,9 +242,10 @@ public class playerMoves : MonoBehaviour
     {
         if (context.performed && hitGround)
         {
+            stepsEffect.Stop();
             isCrouching = true;
             animator.SetBool("crouching", true);
-            speed *= 0.5f;
+            speed *= 0.1f;
 
         }
         if (context.canceled)
@@ -195,8 +270,14 @@ public class playerMoves : MonoBehaviour
     //player moves
     public void Move(InputAction.CallbackContext context)
     {
+        stepsEffect.Play();
         horizontal = context.ReadValue<Vector2>().x;
         animator.SetFloat("running", Mathf.Abs(horizontal));
+
+        if (context.canceled)
+        {
+            stepsEffect.Stop();
+        }
         
     }
 

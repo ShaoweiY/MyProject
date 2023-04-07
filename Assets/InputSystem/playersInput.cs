@@ -98,6 +98,15 @@ public partial class @PlayersInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DemageTest"",
+                    ""type"": ""Button"",
+                    ""id"": ""7cdb023a-4a30-4751-9fcb-f99041aa487f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -439,6 +448,17 @@ public partial class @PlayersInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d1fd0e31-e420-443a-ac86-127c307f6dc0"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""DemageTest"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1034,6 +1054,7 @@ public partial class @PlayersInput : IInputActionCollection2, IDisposable
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
         m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
+        m_Player_DemageTest = m_Player.FindAction("DemageTest", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1113,6 +1134,7 @@ public partial class @PlayersInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Aim;
     private readonly InputAction m_Player_Reload;
     private readonly InputAction m_Player_Attack;
+    private readonly InputAction m_Player_DemageTest;
     public struct PlayerActions
     {
         private @PlayersInput m_Wrapper;
@@ -1125,6 +1147,7 @@ public partial class @PlayersInput : IInputActionCollection2, IDisposable
         public InputAction @Aim => m_Wrapper.m_Player_Aim;
         public InputAction @Reload => m_Wrapper.m_Player_Reload;
         public InputAction @Attack => m_Wrapper.m_Player_Attack;
+        public InputAction @DemageTest => m_Wrapper.m_Player_DemageTest;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1158,6 +1181,9 @@ public partial class @PlayersInput : IInputActionCollection2, IDisposable
                 @Attack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
                 @Attack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
                 @Attack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
+                @DemageTest.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDemageTest;
+                @DemageTest.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDemageTest;
+                @DemageTest.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDemageTest;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1186,6 +1212,9 @@ public partial class @PlayersInput : IInputActionCollection2, IDisposable
                 @Attack.started += instance.OnAttack;
                 @Attack.performed += instance.OnAttack;
                 @Attack.canceled += instance.OnAttack;
+                @DemageTest.started += instance.OnDemageTest;
+                @DemageTest.performed += instance.OnDemageTest;
+                @DemageTest.canceled += instance.OnDemageTest;
             }
         }
     }
@@ -1350,6 +1379,7 @@ public partial class @PlayersInput : IInputActionCollection2, IDisposable
         void OnAim(InputAction.CallbackContext context);
         void OnReload(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
+        void OnDemageTest(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
