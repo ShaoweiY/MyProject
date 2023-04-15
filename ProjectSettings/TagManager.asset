@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ammo
   - Medical
+  - Blocks
   layers:
   - Default
   - TransparentFX

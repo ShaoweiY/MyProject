@@ -1,9 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using System;
 
 public class playerMoves : MonoBehaviour
 {
@@ -14,15 +14,13 @@ public class playerMoves : MonoBehaviour
     [SerializeField] float speed;
     float temp_speed;
     private float horizontal;
-    private bool isFacingPositive = true;
+    public bool isFacingPositive = true;
 
     //Ground check
     public bool hitGround;
     public Transform onGround;
     public LayerMask groundLayer;
     public Animator animator;
-
-    public bool isTouchingBlocks;
     public LayerMask blocksLayer;
 
     //Collection
@@ -53,6 +51,18 @@ public class playerMoves : MonoBehaviour
     public HealthBar health_bar;
     public int demage;
 
+    //Ray
+    [SerializeField] private float raycastLength;
+
+    //climb
+    //public bool ledgeDetected;
+    [SerializeField] private Vector2 offset1;
+    [SerializeField] private Vector2 offset2;
+    private Vector2 climbBegunPosition;
+    private Vector2 climbOverPosition;
+    public bool isTouchingBlocks;
+    
+
     //Sound effects
     [SerializeField] AudioSource fireEffect;
     [SerializeField] AudioSource stepsEffect;
@@ -81,7 +91,7 @@ public class playerMoves : MonoBehaviour
         {
             Flip();
         }
-        else if(isFacingPositive && horizontal < 0f)
+        else if (isFacingPositive && horizontal < 0f)
         {
             Flip();
         }
@@ -107,6 +117,8 @@ public class playerMoves : MonoBehaviour
         }
     }
 
+
+
     public void Hurt(InputAction.CallbackContext context)
     {
         if (context.performed)
@@ -121,25 +133,6 @@ public class playerMoves : MonoBehaviour
         }
     }
 
-    /*
-    //touching the blocks
-    public void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Blocks"))
-        {
-            isTouchingBlocks = true;
-            animator.SetBool("touchBlocks", true);
-        }
-    }
-    public void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Blocks"))
-        {
-            isTouchingBlocks = false;
-            animator.SetBool("touchBlocks", false);
-        }
-    }
-    */
 
     //object collection
     public void OnTriggerEnter2D(Collider2D collision)
@@ -180,18 +173,29 @@ public class playerMoves : MonoBehaviour
         {
             fireEffect.Play();
             animator.SetBool("firing", true);
-
-            Instantiate(bullet, shootPoint_std.position, transform.rotation);
+            if(isFacingPositive)
+                Instantiate(bullet, shootPoint_std.position, transform.rotation);
+            if (!isFacingPositive)
+            {
+                GameObject bulletInstance = Instantiate(bullet, shootPoint_std.position, transform.rotation);
+                bulletInstance.transform.localScale = new Vector3(-0.007190318f, 0.008811175f, 1);
+            }
+                
 
             isFiring = true;
-            Debug.Log("Shoot!");
         }
         if(isCrouching && isAiming && !isFiring && context.performed)
         {
             fireEffect.Play();
             animator.SetBool("crouch&firing", true);
 
-            Instantiate(bullet, shootPoint_crh.position, transform.rotation);
+            if (isFacingPositive)
+                Instantiate(bullet, shootPoint_crh.position, transform.rotation);
+            if (!isFacingPositive)
+            {
+                GameObject bulletInstance = Instantiate(bullet, shootPoint_crh.position, transform.rotation);
+                bulletInstance.transform.localScale = new Vector3(-0.007190318f, 0.008811175f, 1);
+            }
 
 
             isFiring = true;
@@ -265,7 +269,18 @@ public class playerMoves : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             animator.SetBool("jumping", true);
         }
-    }   
+
+        if (context.performed && isTouchingBlocks)
+        {
+            animator.SetBool("climbing", true);
+        }else
+            animator.SetBool("climbing", false);
+    }
+    
+    private void climbOver()
+    {
+        transform.position = climbOverPosition;
+    }
 
     //player moves
     public void Move(InputAction.CallbackContext context)
@@ -283,6 +298,33 @@ public class playerMoves : MonoBehaviour
 
     public void physicsCheck()
     {
+        //Ray
+        Vector2 raycastDirection = isFacingPositive ? transform.right : -transform.right;
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, raycastDirection, raycastLength, LayerMask.GetMask("Ground"));
+        Color rayColor = Color.red;
+        if (hit.collider != null && hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            rayColor = Color.green;
+            animator.SetBool("touchBlocks", true);
+            isTouchingBlocks = true;
+        }
+        else
+        {
+            animator.SetBool("touchBlocks", false);
+            isTouchingBlocks = false;
+        }
+        Debug.DrawRay(transform.position, raycastDirection * raycastLength, rayColor);
+        Vector2 climbPosition = transform.position;
+        climbBegunPosition = climbPosition + offset1;
+        climbOverPosition = climbPosition + offset2;
+
+        if (isTouchingBlocks)
+        {
+            transform.position = climbBegunPosition;
+        }
+
+
+        //Ground check
         if (col.IsTouchingLayers(groundLayer))
         {
             hitGround = true;
@@ -293,7 +335,6 @@ public class playerMoves : MonoBehaviour
             hitGround = false;
             isjumping = true;
         }
-            
     }
 
     //change animation stages
