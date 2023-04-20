@@ -7,6 +7,8 @@ TagManager:
   - Ammo
   - Medical
   - Blocks
+  - Enemy
+  - Bullet
   layers:
   - Default
   - TransparentFX
