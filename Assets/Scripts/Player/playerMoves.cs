@@ -53,7 +53,13 @@ public class playerMoves : MonoBehaviour
     public bool isFiring;
     public Transform shootPoint_std;
     public Transform shootPoint_crh;
-    public GameObject bullet;    
+    public GameObject bullet;
+    public GameObject shell;
+    public Transform shellPoint_std;
+    public Transform shellPoint_crh;
+    public GameObject muzalFlash_std;
+    public GameObject muzalFlash_crh;
+
 
     //Ray
     [Header("PLAYER RAY")]
@@ -92,7 +98,8 @@ public class playerMoves : MonoBehaviour
         isFiring = false;
         isTouchingBlocks = false;
 
-        
+        muzalFlash_std.SetActive(false);
+        muzalFlash_crh.SetActive(false);
 
     }
 
@@ -129,36 +136,11 @@ public class playerMoves : MonoBehaviour
             speed = temp_speed;
             jumpForce = temp_jumpForce;
         }
-    }
 
-
-
-    public void TakeDamage(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-//            System.Random random = new System.Random();
-//            damage = random.Next(0, 20);
-            current_health -= damage;
-
-            health_bar.setHealth(current_health);
-
-            Debug.Log(current_health);
-
-            if (current_health <= 0)
-            {
-                current_health = 0;
-                PlayerDisabled();
-                Debug.Log("dead!");
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-            }
-        }
         
+
     }
-
-
     
-
     //player reload
     public void Reload(InputAction.CallbackContext context)
     {
@@ -178,12 +160,25 @@ public class playerMoves : MonoBehaviour
         {
             fireEffect.Play();
             animator.SetBool("firing", true);
-            if(isFacingPositive)
+            if (isFacingPositive)
+            {
                 Instantiate(bullet, shootPoint_std.position, transform.rotation);
+                muzalFlash_std.SetActive(true);
+                GameObject newShell = Instantiate(shell, shellPoint_std.position, transform.rotation);
+                Rigidbody2D rb = newShell.GetComponent<Rigidbody2D>();
+                rb.velocity = Vector2.zero;
+            }
+                
             if (!isFacingPositive)
             {
                 GameObject bulletInstance = Instantiate(bullet, shootPoint_std.position, transform.rotation);
-                bulletInstance.transform.localScale = new Vector3(-0.007190318f, 0.008811175f, 1);
+                bulletInstance.transform.localScale = new Vector3(-0.007190318f, 0.008811175f, 1f);
+                muzalFlash_std.SetActive(true);
+
+                GameObject newShell = Instantiate(shell, shellPoint_std.position, transform.rotation);
+                newShell.transform.localScale = new Vector3(-0.2120568f, 0.2547083f, 1f);
+                Rigidbody2D rb = newShell.GetComponent<Rigidbody2D>();
+                rb.velocity = Vector2.zero;
             }
             isFiring = true;
         }
@@ -194,11 +189,24 @@ public class playerMoves : MonoBehaviour
             animator.SetBool("crouch&firing", true);
 
             if (isFacingPositive)
+            {
                 Instantiate(bullet, shootPoint_crh.position, transform.rotation);
+                muzalFlash_crh.SetActive(true);
+
+                GameObject newShell = Instantiate(shell, shellPoint_crh.position, transform.rotation);
+                Rigidbody2D rb = newShell.GetComponent<Rigidbody2D>();
+                rb.velocity = Vector2.zero;
+            }               
             if (!isFacingPositive)
             {
                 GameObject bulletInstance = Instantiate(bullet, shootPoint_crh.position, transform.rotation);
-                bulletInstance.transform.localScale = new Vector3(-0.007190318f, 0.008811175f, 1);
+                bulletInstance.transform.localScale = new Vector3(-0.007190318f, 0.008811175f, 1f);
+                muzalFlash_crh.SetActive(true);
+
+                GameObject newShell = Instantiate(shell, shellPoint_crh.position, transform.rotation);
+                newShell.transform.localScale = new Vector3(-0.2120568f, 0.2547083f, 1f);
+                Rigidbody2D rb = newShell.GetComponent<Rigidbody2D>();
+                rb.velocity = Vector2.zero;
             }
             isFiring = true;
         }
@@ -208,6 +216,8 @@ public class playerMoves : MonoBehaviour
             isFiring = false;
             animator.SetBool("firing", false);
             animator.SetBool("crouch&firing", false);
+            muzalFlash_std.SetActive(false);
+            muzalFlash_crh.SetActive(false);
         }
     }
 
@@ -460,19 +470,27 @@ public class playerMoves : MonoBehaviour
     {       
         if (enemy_col.gameObject.CompareTag("Enemy"))
         {
-            current_health -= damage;
-            health_bar.setHealth(current_health);
-            Debug.Log(current_health);
-            if (current_health <= 0)
-            {
-                current_health = 0;
-                PlayerDisabled();
-                Debug.Log("dead!");
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-            }
+            takeDamage(damage);
         }
 
+        if (enemy_col.gameObject.CompareTag("hitBox"))
+        {
+            takeDamage(damage);
+        }
+    }
 
+    public void takeDamage(int damage)
+    {
+        current_health -= damage;
+        health_bar.setHealth(current_health);
+        Debug.Log(current_health);
+        if (current_health <= 0)
+        {
+            current_health = 0;
+            PlayerDisabled();
+            Debug.Log("dead!");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
     }
     
 }
