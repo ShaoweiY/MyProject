@@ -40,7 +40,7 @@ public class playerMoves : MonoBehaviour
 
     //Player Climb
     [Header("PLAYER CLIMB")]
-    public bool isTouchingBlocks;
+    public bool isTouchingBlocks = false;
     [SerializeField] private Vector2 offset1;
     [SerializeField] private Vector2 offset2;
     private Vector2 climbBegunPosition;
@@ -50,7 +50,8 @@ public class playerMoves : MonoBehaviour
     [Header("PLAYER ATTACK")]
     public bool isCrouching;
     public bool isAiming;
-    public bool isFiring;
+    public bool isFiring = false;
+    public bool canShoot;
     public Transform shootPoint_std;
     public Transform shootPoint_crh;
     public GameObject bullet;
@@ -60,6 +61,11 @@ public class playerMoves : MonoBehaviour
     public GameObject muzalFlash_std;
     public GameObject muzalFlash_crh;
 
+    //reload
+    [Header("RELOAD SYSTEM")]
+    public bool canReload;
+    public GameObject[] pellet;
+    public int pelletAmount;
 
     //Ray
     [Header("PLAYER RAY")]
@@ -77,8 +83,10 @@ public class playerMoves : MonoBehaviour
 
     //Collection
     [Header("COLLECTION")]
-    public int Ammo = 0;
+    public int Ammo;
     public Text storageNum;
+
+
 
     //Sounds effects
     [Header("SOUNDS")]
@@ -95,12 +103,14 @@ public class playerMoves : MonoBehaviour
         pGravity = new Vector2(0, -Physics2D.gravity.y);
         temp_speed = speed;
         temp_jumpForce = jumpForce;
-        isFiring = false;
-        isTouchingBlocks = false;
 
-        muzalFlash_std.SetActive(false);
-        muzalFlash_crh.SetActive(false);
-
+        Ammo = 1;
+        storageNum.text = Ammo.ToString();
+        for (int i = 0; i < 11; i++)
+        {
+            pellet[i].gameObject.SetActive(true);
+        }
+        pelletAmount = 11;
     }
 
 
@@ -135,78 +145,110 @@ public class playerMoves : MonoBehaviour
         {
             speed = temp_speed;
             jumpForce = temp_jumpForce;
-        }
-
-        
+        } 
 
     }
     
     //player reload
     public void Reload(InputAction.CallbackContext context)
     {
-        if(hitGround && !isCrouching && !isjumping && !isAiming && context.performed)
+        if(hitGround && !isCrouching && !isjumping && !isAiming && (Ammo > 0) && context.performed)
         {
             animator.SetBool("reloading", true);
-            Ammo--;
+            
         }else
             animator.SetBool("reloading", false);
-
+    }
+    private void reloadAmmo()
+    {
+        Ammo--;
+        storageNum.text = Ammo.ToString();
+        pelletAmount = 11;
+        for (int i = 0; i < 11; i++)
+        {
+            pellet[i].gameObject.SetActive(true);
+        }
     }
 
     public void Fire(InputAction.CallbackContext context)
     {
         
-        if (!isCrouching && isAiming && !isFiring && !isTouchingBlocks && context.performed)
+        if ((pelletAmount > 0) && !isCrouching && isAiming && !isFiring && !isTouchingBlocks && context.performed)
         {
             fireEffect.Play();
             animator.SetBool("firing", true);
             if (isFacingPositive)
             {
+                //generate the shooting bullets
                 Instantiate(bullet, shootPoint_std.position, transform.rotation);
                 muzalFlash_std.SetActive(true);
+
+                //generate shells
                 GameObject newShell = Instantiate(shell, shellPoint_std.position, transform.rotation);
                 Rigidbody2D rb = newShell.GetComponent<Rigidbody2D>();
                 rb.velocity = Vector2.zero;
+
+                //reduce bullet amount in the weapon
+                pelletAmount -= 1;
+                pellet[pelletAmount].gameObject.SetActive(false);
             }
                 
             if (!isFacingPositive)
             {
+                //generate the shooting bullets
                 GameObject bulletInstance = Instantiate(bullet, shootPoint_std.position, transform.rotation);
                 bulletInstance.transform.localScale = new Vector3(-0.007190318f, 0.008811175f, 1f);
                 muzalFlash_std.SetActive(true);
 
+                //generate shells
                 GameObject newShell = Instantiate(shell, shellPoint_std.position, transform.rotation);
                 newShell.transform.localScale = new Vector3(-0.2120568f, 0.2547083f, 1f);
                 Rigidbody2D rb = newShell.GetComponent<Rigidbody2D>();
                 rb.velocity = Vector2.zero;
+
+                //reduce bullet amount in the weapon
+                pelletAmount -= 1;
+                pellet[pelletAmount].gameObject.SetActive(false);
             }
             isFiring = true;
         }
 
-        if(isCrouching && isAiming && !isFiring && !isTouchingBlocks && context.performed)
+        if((pelletAmount > 0) && isCrouching && isAiming && !isFiring && !isTouchingBlocks && context.performed)
         {
             fireEffect.Play();
             animator.SetBool("crouch&firing", true);
 
             if (isFacingPositive)
             {
+                //generate the shooting bullets
                 Instantiate(bullet, shootPoint_crh.position, transform.rotation);
                 muzalFlash_crh.SetActive(true);
 
+                //generate shells
                 GameObject newShell = Instantiate(shell, shellPoint_crh.position, transform.rotation);
                 Rigidbody2D rb = newShell.GetComponent<Rigidbody2D>();
                 rb.velocity = Vector2.zero;
+
+                //reduce bullet amount in the weapon
+                pelletAmount -= 1;
+                pellet[pelletAmount].gameObject.SetActive(false);
             }               
             if (!isFacingPositive)
             {
+                //generate the shooting bullets
                 GameObject bulletInstance = Instantiate(bullet, shootPoint_crh.position, transform.rotation);
                 bulletInstance.transform.localScale = new Vector3(-0.007190318f, 0.008811175f, 1f);
                 muzalFlash_crh.SetActive(true);
 
+                //generate shells
                 GameObject newShell = Instantiate(shell, shellPoint_crh.position, transform.rotation);
                 newShell.transform.localScale = new Vector3(-0.2120568f, 0.2547083f, 1f);
                 Rigidbody2D rb = newShell.GetComponent<Rigidbody2D>();
                 rb.velocity = Vector2.zero;
+
+                //reduce bullet amount in the weapon
+                pelletAmount -= 1;
+                pellet[pelletAmount].gameObject.SetActive(false);
             }
             isFiring = true;
         }
@@ -368,9 +410,10 @@ public class playerMoves : MonoBehaviour
             isTouchingBlocks = false;
         }
         Debug.DrawRay(eyePosition, raycastDirection1 * raycastLength, rayColor1);
+
+        //=================
         Vector2 playerPosition = transform.position;
         eyePosition = playerPosition + offset;
-        //=================
 
         if (isTouchingBlocks)
         {

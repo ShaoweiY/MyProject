@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8790585699872052379}
   m_Layer: 8
   m_Name: broken_train1
-  m_TagString: Untagged
+  m_TagString: Blocks
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
