@@ -1,2 +1,0 @@
-# MyProject
-Side-scrolling game

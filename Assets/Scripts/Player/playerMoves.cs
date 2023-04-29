@@ -41,6 +41,10 @@ public class playerMoves : MonoBehaviour
     //Player Climb
     [Header("PLAYER CLIMB")]
     public bool isTouchingBlocks = false;
+    public bool isClimbing;
+    private float temp_climb_x;
+    private float temp_climb_y;
+
     [SerializeField] private Vector2 offset1;
     [SerializeField] private Vector2 offset2;
     private Vector2 climbBegunPosition;
@@ -63,6 +67,7 @@ public class playerMoves : MonoBehaviour
 
     //reload
     [Header("RELOAD SYSTEM")]
+    public bool isReloading;
     public bool canReload;
     public GameObject[] pellet;
     public int pelletAmount;
@@ -79,20 +84,16 @@ public class playerMoves : MonoBehaviour
     public int current_health;
     public int damage = 25;
     public HealthBar health_bar;
-//    private bool isDamaged;
 
     //Collection
     [Header("COLLECTION")]
     public int Ammo;
     public Text storageNum;
 
-
-
     //Sounds effects
     [Header("SOUNDS")]
     [SerializeField] AudioSource fireEffect;
     [SerializeField] AudioSource stepsEffect;
-
 
     void Start()
     {
@@ -103,6 +104,10 @@ public class playerMoves : MonoBehaviour
         pGravity = new Vector2(0, -Physics2D.gravity.y);
         temp_speed = speed;
         temp_jumpForce = jumpForce;
+        temp_climb_x = offset2.x;
+        temp_climb_y = offset2.y;
+
+
 
         Ammo = 1;
         storageNum.text = Ammo.ToString();
@@ -136,16 +141,28 @@ public class playerMoves : MonoBehaviour
         physicsCheck();
         jumpAnim();
 
-        if (isAiming == true)
+        if (isAiming || isFiring || isReloading)
         {
             speed = 0;
             jumpForce = 0;
         }
-        else if (isAiming == false)
+        else if (!isAiming || !isFiring || !isReloading)
         {
             speed = temp_speed;
             jumpForce = temp_jumpForce;
-        } 
+        }
+
+        if (isClimbing)
+        {
+            offset2.x = 0;
+            offset2.y = 0;
+        }
+        else
+        {
+            offset2.x = temp_climb_x;
+            offset2.y = temp_climb_y;
+        }
+
 
     }
     
@@ -155,12 +172,13 @@ public class playerMoves : MonoBehaviour
         if(hitGround && !isCrouching && !isjumping && !isAiming && (Ammo > 0) && context.performed)
         {
             animator.SetBool("reloading", true);
-            
-        }else
-            animator.SetBool("reloading", false);
+            isReloading = true;
+        }      
     }
+
     private void reloadAmmo()
     {
+        animator.SetBool("reloading", false);
         Ammo--;
         storageNum.text = Ammo.ToString();
         pelletAmount = 11;
@@ -168,8 +186,10 @@ public class playerMoves : MonoBehaviour
         {
             pellet[i].gameObject.SetActive(true);
         }
+        isReloading = false;
     }
 
+    //player fires
     public void Fire(InputAction.CallbackContext context)
     {
         
@@ -252,15 +272,19 @@ public class playerMoves : MonoBehaviour
             }
             isFiring = true;
         }
+    }
 
-        if (context.canceled)
-        {
-            isFiring = false;
-            animator.SetBool("firing", false);
-            animator.SetBool("crouch&firing", false);
-            muzalFlash_std.SetActive(false);
-            muzalFlash_crh.SetActive(false);
-        }
+    public void fire_flash_over()
+    {
+        muzalFlash_std.SetActive(false);
+        muzalFlash_crh.SetActive(false);
+    }
+
+    public void fireOver()
+    {
+        isFiring = false;
+        animator.SetBool("firing", false);
+        animator.SetBool("crouch&firing", false);
     }
 
     //player aims
@@ -315,7 +339,7 @@ public class playerMoves : MonoBehaviour
         }
     }
 
-    //player jumps
+    //player jumps & climbs
     public void Jump(InputAction.CallbackContext context)
     {
         if (isTouchingBlocks)
@@ -333,19 +357,15 @@ public class playerMoves : MonoBehaviour
         if (context.performed && hitGround && canJump)
         {
             animator.SetBool("readyToJump", true);
-//            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-//            animator.SetBool("jumping", true);
         }
 
         if (context.performed && isTouchingBlocks)
         {
             animator.SetBool("climbing", true);
-        }else
-            animator.SetBool("climbing", false);
-
-        // Ignore player input during a jump
-  
-
+            climbBegunPosition = transform.position;
+            climbOverPosition = climbBegunPosition + offset2;
+            isClimbing = true;
+        }
     }
 
     private void jumping()
@@ -354,10 +374,14 @@ public class playerMoves : MonoBehaviour
         rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         animator.SetBool("jumping", true);
     }
-    
+
     private void climbOver()
     {
+        animator.SetBool("climbing", false);
         transform.position = climbOverPosition;
+        isClimbing = false;
+        Debug.Log(transform.position);
+        Debug.Log(climbOverPosition);
     }
 
     //player moves
@@ -366,6 +390,22 @@ public class playerMoves : MonoBehaviour
         stepsEffect.Play();
         horizontal = context.ReadValue<Vector2>().x;
         animator.SetFloat("running", Mathf.Abs(horizontal));
+
+        if (isTouchingBlocks && context.performed)
+        {
+            GameObject boxBlock = GameObject.Find("Environment/box_wood");
+            Rigidbody2D boxBlock_rb = boxBlock.GetComponent<Rigidbody2D>();
+            boxBlock_rb.bodyType = RigidbodyType2D.Dynamic;
+            speed *= 0.3f;
+        }
+        else if(isTouchingBlocks || context.canceled)
+        {
+            GameObject boxBlock = GameObject.Find("Environment/box_wood");
+            Rigidbody2D boxBlock_rb = boxBlock.GetComponent<Rigidbody2D>();
+            boxBlock_rb.bodyType = RigidbodyType2D.Static;
+            speed = temp_speed;
+        }
+
 
         if (context.canceled)
         {
@@ -463,6 +503,8 @@ public class playerMoves : MonoBehaviour
             Vector3 localScale = transform.localScale;
             localScale.x *= -1.0f;
             transform.localScale = localScale;
+            offset2.x = -offset2.x;
+            temp_climb_x = -temp_climb_x;
         }        
     }
 
@@ -505,6 +547,10 @@ public class playerMoves : MonoBehaviour
             Debug.Log(current_health);
         }
 
+        if(collision.tag == "escape")
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
+        }
         
     }
 

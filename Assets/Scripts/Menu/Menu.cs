@@ -5,9 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
-    public void PlayGame()
+    public Animator anim;
+
+    public void Playstory()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        GameObject.Find("Canvas/MainMenu/UI").SetActive(false);
+        anim.SetBool("storyDisplay", true);
     }
 
     public void QuitGame()
@@ -18,5 +21,10 @@ public class Menu : MonoBehaviour
     public void UIEnable()
     {
         GameObject.Find("Canvas/MainMenu/UI").SetActive(true);
+    }
+
+    public void Playgame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

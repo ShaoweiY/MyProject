@@ -10,6 +10,11 @@ public class RetryMenu : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 
+    public void resumeGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 2);
+    }
+
     public void QuitGame()
     {
         Application.Quit();

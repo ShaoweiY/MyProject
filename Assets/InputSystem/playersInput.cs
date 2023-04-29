@@ -244,6 +244,17 @@ public partial class @PlayersInput : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""56f6e0a2-aae4-40c7-a7a2-c7bb94360d93"",
+                    ""path"": ""<XInputController>/dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""c1f7a91b-d0fd-4a62-997e-7fb9b69bf235"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
@@ -343,6 +354,17 @@ public partial class @PlayersInput : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""f46c31d8-8d51-4276-a8b3-b13463990da3"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""b0355d7d-e339-43a2-9d9c-e9592d82e76a"",
                     ""path"": ""<Keyboard>/upArrow"",
                     ""interactions"": """",
@@ -356,6 +378,17 @@ public partial class @PlayersInput : IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""bbee89d0-2015-4260-b9bf-3d73e04ec229"",
                     ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""57b9665b-a974-4810-b7f0-5728ad609bf3"",
+                    ""path"": ""<XInputController>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
@@ -387,6 +420,17 @@ public partial class @PlayersInput : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""b158947c-3bc4-48b7-89ad-48ed22517cdf"",
+                    ""path"": ""<XInputController>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""b14fe9ab-d80e-452a-ba9e-fabb3358742a"",
                     ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
@@ -400,6 +444,17 @@ public partial class @PlayersInput : IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""550ea0c8-a4bc-4173-a436-5c18fecc7d8b"",
                     ""path"": ""<Gamepad>/leftStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""01eb208f-9199-41c9-bf1a-e96a9697e53d"",
+                    ""path"": ""<XInputController>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
@@ -431,6 +486,17 @@ public partial class @PlayersInput : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""8c6965a8-e5b0-4716-9446-c9060e6d08cd"",
+                    ""path"": ""<XInputController>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""79bc6f90-ad11-47ad-9232-c64676c02ee3"",
                     ""path"": ""<Keyboard>/z"",
                     ""interactions"": """",
@@ -444,6 +510,17 @@ public partial class @PlayersInput : IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""eb2d9538-a27b-4b56-97ab-2cc5ed142692"",
                     ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7c70d647-5637-4bcc-86fb-9a34441603a0"",
+                    ""path"": ""<XInputController>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",

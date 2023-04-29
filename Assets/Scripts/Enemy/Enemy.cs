@@ -41,7 +41,7 @@ public class Enemy : MonoBehaviour
         Destroy(enemy_rightPoint.gameObject);
 
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        if (stateInfo.IsName("YourAnimationName") && stateInfo.normalizedTime >= 0.5f)
+        if (stateInfo.IsName("02Attack") && stateInfo.normalizedTime >= 0.5f)
         {
             SetActive();
         }
